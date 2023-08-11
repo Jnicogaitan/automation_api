@@ -1,0 +1,79 @@
+<html>
+<head>
+<title>main.py</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #cc7832;}
+.s1 { color: #a9b7c6;}
+.s2 { color: #6a8759;}
+.s3 { color: #808080;}
+.s4 { color: #6897bb;}
+</style>
+</head>
+<body bgcolor="#2b2b2b">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+main.py</font>
+</center></td></tr></table>
+<pre><span class="s0">from </span><span class="s1">datetime </span><span class="s0">import </span><span class="s1">datetime</span>
+<span class="s0">from </span><span class="s1">automation_api.enums </span><span class="s0">import </span><span class="s1">DevelopmentEnvironments</span>
+<span class="s0">from </span><span class="s1">automation_api.clients </span><span class="s0">import </span><span class="s1">SupertableClient</span>
+
+<span class="s1">client = SupertableClient()</span>
+<span class="s1">blacklist_collection = client.get_collection(DevelopmentEnvironments.DEV3</span><span class="s0">, </span><span class="s2">'blacklist'</span><span class="s1">)</span>
+<span class="s1">datacreditexperian_collection = client.get_collection(DevelopmentEnvironments.DEV1</span><span class="s0">, </span><span class="s2">'datacreditexperian'</span><span class="s1">)</span>
+
+<span class="s0">try</span><span class="s1">:</span>
+     <span class="s3"># Cantidad de documentos en la colección</span>
+     <span class="s1">count = blacklist_collection.count_documents({</span><span class="s2">'identification'</span><span class="s1">:</span><span class="s4">1032392583</span><span class="s1">})</span>
+     <span class="s1">print(</span><span class="s2">'Conexión exitosa a la base de datos de GrupoR5'</span><span class="s1">)</span>
+     <span class="s1">print(</span><span class="s2">'Cantidad de documentos en blacklist:'</span><span class="s0">, </span><span class="s1">count)</span>
+<span class="s0">except </span><span class="s1">Exception </span><span class="s0">as </span><span class="s1">e:</span>
+     <span class="s1">print(</span><span class="s2">'Error al intentar acceder a la colección:'</span><span class="s0">, </span><span class="s1">e)</span>
+
+<span class="s0">try</span><span class="s1">:</span>
+     <span class="s1">count = datacreditexperian_collection.count_documents({</span><span class="s2">'identification'</span><span class="s1">:</span><span class="s4">1032392583</span><span class="s1">})</span>
+     <span class="s1">print(</span><span class="s2">'Cantidad de documentos en datacreditexperian:'</span><span class="s0">, </span><span class="s1">count)</span>
+<span class="s0">except </span><span class="s1">Exception </span><span class="s0">as </span><span class="s1">f:</span>
+     <span class="s1">print(</span><span class="s2">'Error al intentar acceder a la colección:'</span><span class="s0">, </span><span class="s1">f)</span>
+
+ <span class="s3"># Eliminacion de los registros</span>
+<span class="s1">delete_result1 = blacklist_collection.delete_many({</span>
+     <span class="s2">'value'</span><span class="s1">: {</span>
+         <span class="s2">'$in'</span><span class="s1">: [</span><span class="s2">'1032392583'</span><span class="s0">,</span>
+                 <span class="s2">'3105564840'</span><span class="s0">,</span>
+                 <span class="s2">'nicolas.gaitan+666@grupor5.com'</span><span class="s0">,</span>
+                 <span class="s2">'nicolas.gaitan+233@grupor5.com'</span><span class="s1">]</span>
+     <span class="s1">}</span>
+ <span class="s1">})</span>
+
+<span class="s1">delete_result2 = datacreditexperian_collection.delete_many({</span>
+     <span class="s2">'identification'</span><span class="s1">:  </span><span class="s4">1032392583</span><span class="s0">,</span>
+     <span class="s2">'created'</span><span class="s1">: {</span>
+         <span class="s2">&quot;$gt&quot;</span><span class="s1">: datetime(</span><span class="s4">2023</span><span class="s0">, </span><span class="s4">2</span><span class="s0">, </span><span class="s4">12</span><span class="s0">, </span><span class="s4">15</span><span class="s0">, </span><span class="s4">24</span><span class="s0">, </span><span class="s4">15</span><span class="s0">, </span><span class="s4">724000</span><span class="s1">)</span>
+     <span class="s1">}</span>
+ <span class="s1">})</span>
+<span class="s1">print(</span><span class="s2">'Documentos eliminados de blacklist:'</span><span class="s0">, </span><span class="s1">delete_result1.deleted_count)</span>
+<span class="s1">print(</span><span class="s2">'Documentos eliminados de datacreditexperian:'</span><span class="s0">, </span><span class="s1">delete_result2.deleted_count)</span>
+
+<span class="s1">client.close()</span>
+<span class="s1">print(client.server_info())</span>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</pre>
+</body>
+</html>
